@@ -1,16 +1,17 @@
 // src/components/Dashboard.js
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
-function Dashboard() {
+const Dashboard = () => {
   const [performances, setPerformances] = useState([]);
   const [newPerformance, setNewPerformance] = useState('');
 
   useEffect(() => {
     const fetchPerformances = async () => {
-      const snapshot = await db.collection('performances').get();
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setPerformances(data);
+      const querysnapshot = await getDocs(collection(db,'performances'));
+      const docs = querysnapshot.docs.map(doc => doc.data());
+      setPerformances(docs);
     };
 
     fetchPerformances();
